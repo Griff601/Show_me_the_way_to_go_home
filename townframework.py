@@ -1,5 +1,9 @@
 import csv
 
+class Location:
+    def __init__(self, address):
+        self.address = address
+
 def load(file): 
     with open(file, newline='') as f:
         reader = csv.reader(f, quoting=csv.QUOTE_NONNUMERIC)
@@ -8,7 +12,7 @@ def load(file):
         for row in reader:
             rowlist = []
             for value in row:
-                rowlist.append(value)
+                rowlist.append(Location(value))
             
             town.append(rowlist)
     return town
