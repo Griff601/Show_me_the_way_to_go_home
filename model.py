@@ -1,7 +1,7 @@
+import townframework
 
 class Location:
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, address):
+        self.address = address
   
-town = []      
-town.append(Location("pub"))
+town = townframework.load('drunk.txt')
