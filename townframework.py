@@ -1,4 +1,5 @@
 import csv
+import random
 
 class Location:
     def __init__(self, address):
@@ -9,6 +10,18 @@ class Town:
         self.locations = locations
         self.drunks = []
         self.environment = environment
+        # locate pub values
+        pub = locations[1]
+        possibleStarts = pub.points.copy()
+        # create drunk for each location that is not the pub
+        for location in locations:
+            if location == pub:
+                continue
+            # selecting start point within pub
+            x, y = random.choice(possibleStarts)
+            possibleStarts.remove((x, y))
+            self.drunks.append(Drunk(x, y, location))
+        
 
 class Drunk:
     def __init__(self, x, y, home):
