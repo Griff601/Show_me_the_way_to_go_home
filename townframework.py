@@ -46,7 +46,7 @@ class Drunk:
         if imHome:
             return
         directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-        directions.append(self.nextDirectionHome())
+        directions.append(self.nextDirectionHome(directions))
         random.shuffle(directions)
         # for every direction randomly selected, this will check if the drunk 
         # can move here
@@ -65,19 +65,19 @@ class Drunk:
     def distanceBetween(self, p1, p2):
         return abs (math.sqrt(((p1[0]-p2[0])**2)+((p1[1]-p2[1])**2)))
 
-    # working out the
-    def nextDirectionHome(self): 
+    # working out the translation that gets the drunk closer to home. 
+    def nextDirectionHome(self, possibleDirections):
+        smallestDistance = None # None indicates that no value has been seen
         result = (0, 0)
-        smallestDistance = None
         for point in self.home.points:
-            distance = self.distanceBetween((self.x, self.y), point)
-            if smallestDistance == None:
-                smallestDistance = distance 
-            elif distance < smallestDistance:
-                smallestDistance = distance
-                result = point
-        return result
-            
+            for dx, dy in possibleDirections:
+                # translate drunks position to test distance
+                targetPoint = (self.x + dx, self.y + dy)
+                distance = self.distanceBetween(targetPoint, point)
+                if smallestDistance == None or distance < smallestDistance:
+                    smallestDistance = distance
+                    result = (dx, dy)
+        return result 
         
     def canMoveTo(self, x, y):
         # these checks will stop the drunks leaving the boundary of the town
