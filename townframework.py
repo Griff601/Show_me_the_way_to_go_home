@@ -22,20 +22,22 @@ class Town:
             x, y = random.choice(possibleStarts)
             possibleStarts.remove((x, y))
             # create drunk
-            self.drunks.append(Drunk(x, y, location, environment))
+            self.drunks.append(Drunk(x, y, location, environment, self.drunks, pub))
     def think(self):
         # randomising the drunks on every iteration in order to remove 
         # artifacts
-        for drunk in random.sample(self.drunks):
+        for drunk in random.sample(self.drunks, k=25):
             drunk.wander()
         
 
 class Drunk:
-    def __init__(self, x, y, home, environment):
+    def __init__(self, x, y, home, environment, drunks, pub):
         self.home = home
         self.x = x
         self.y = y
         self.environment = environment
+        self.drunks = drunks
+        self.pub = pub
     # setting up the wandering of drunks
     def wander(self):
         # stopping the drunks from wandering when they reach their home
@@ -43,23 +45,42 @@ class Drunk:
         if imHome:
             return
         directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-        x, y = random.choice(directions)
+        random.shuffle(directions)
+        # for every direction randomly selected, this will check if the drunk 
+        # can move here
+        for x, y in directions:
+            
+            # finding next coordinate for drunks
+            nextX = self.x + x
+            nextY = self.y + y
+            if self.canMoveTo(nextX, nextY):
+                self.x += x
+                self.y += y
+                # changing the environment to show individual cells that have been 
+                # passed
+                self.environment[y][x] += 1
+                break
+            
+    def canMoveTo(self, x, y):
         # these checks will stop the drunks leaving the boundary of the town
         # but drunks will get stuck on the outer edge and 1 in 3 times will
         # not be able to move away. 
-        nextX = self.x + x
-        nextY = self.y + y
-        if nextY < 0 or nextY >= len(self.environment):
-            return
-        if nextX < 0 or nextX >= len(self.environment[nextY]):
-            return
-        self.x += x
-        self.y += y
-        # changing the environment to show individual cells that have been 
-        # passed
-        self.environment[y][x] += 1
+        if y < 0 or y >= len(self.environment):
+            return False
+        if x < 0 or x >= len(self.environment[y]):
+            return False
         
-        
+        # I tried to let the drunks move through each other whilst in the pub
+        # but it proved too difficult to get them to move effectively with this
+        # condition set.
+        # if not (self.x, self.y) in self.pub.points:
+            
+        #     # checking to see if next spot is already occupied by a drunk.
+        #     # this is a potential artifact because the drunks are communicating.
+        #     for drunk in self.drunks:
+        #         if self.x == drunk.x and self.y == drunk.y:
+        #             return False 
+        return True
 
 def load(file): 
     locations = {}
