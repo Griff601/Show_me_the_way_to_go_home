@@ -28,6 +28,7 @@ for drunk in town.drunks:
 matplotlib.pyplot.imshow(town.heatMap, alpha = 0.5)
 matplotlib.pyplot.show()
 
+# print out results of which drunks got home and which did not
 for drunk in town.drunks:
     if drunk.imHome:
         message = "got home safely"
@@ -35,6 +36,7 @@ for drunk in town.drunks:
         message = "is still at large"
     print("The drunk for house", drunk.home.address, message)
   
+    # print list of what points were visited by which drunks
 for key, visitList in town.visits.items():
     drunkNames = list(map(lambda x: x.home.address, visitList))
     print('point', key, 'was visited by the following drunks: ', drunkNames)

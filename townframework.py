@@ -20,12 +20,15 @@ class Town:
         self.visits = {}
         for row in environment:
             self.heatMap.append([0] * len(row))
-        # locate pub values
+        # extract and locate pub values
+        street = locations[0]
         pub = locations[1]
+        notHomes = [pub, street]
+        
         possibleStarts = pub.points.copy()
-        # create drunk for each location that is not the pub
+        # create drunk for each location that is not the pub or the street
         for key, location in locations.items():
-            if location == pub:
+            if location in notHomes:
                 continue
             # selecting start point within pub
             x, y = random.choice(possibleStarts)
@@ -140,7 +143,7 @@ def load(file):
                 # converting csv values into integers
                 value = int(value)
                 rowlist.append(value)
-                if not value == 0 and not value in locations:
+                if not value in locations:
                     locations[value] = Location(value)
                     
                 # asign points to locations
