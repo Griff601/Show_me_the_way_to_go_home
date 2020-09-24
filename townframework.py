@@ -24,7 +24,9 @@ class Town:
             # create drunk
             self.drunks.append(Drunk(x, y, location, environment))
     def think(self):
-        for drunk in self.drunks:
+        # randomising the drunks on every iteration in order to remove 
+        # artifacts
+        for drunk in random.sample(self.drunks):
             drunk.wander()
         
 
