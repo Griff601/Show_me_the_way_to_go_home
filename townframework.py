@@ -23,6 +23,9 @@ class Town:
             possibleStarts.remove((x, y))
             # create drunk
             self.drunks.append(Drunk(x, y, location, environment))
+    def think(self):
+        for drunk in self.drunks:
+            drunk.wander()
         
 
 class Drunk:
@@ -52,7 +55,7 @@ class Drunk:
         self.y += y
         # changing the environment to show individual cells that have been 
         # passed
-        #self.environment[y][x] += 1
+        self.environment[y][x] += 1
         
         
 
