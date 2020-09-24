@@ -17,6 +17,7 @@ class Town:
         self.drunks = []
         self.environment = environment
         self.heatMap = []
+        self.visits = {}
         for row in environment:
             self.heatMap.append([0] * len(row))
         # locate pub values
@@ -48,6 +49,7 @@ class Drunk:
         self.pub = pub
         self.heatMap = town.heatMap
         self.imHome = False
+        self.visits = town.visits
     # setting up the wandering of drunks
     def wander(self):
         # stopping the drunks from wandering when they reach their home
@@ -70,7 +72,15 @@ class Drunk:
                 # changing the environment to show individual cells that have been 
                 # passed
                 
+                # to store all points visited by a drunk
                 self.heatMap[self.y][self.x] += 1
+                
+                if not (self.x, self.y) in self.visits:
+                    self.visits[(self.x, self.y)] = []
+                pointList = self.visits[(self.x, self.y)]
+                if not self in pointList:
+                    pointList.append(self)
+                
                 break
     def distanceBetween(self, p1, p2):
         return abs (math.sqrt(((p1[0]-p2[0])**2)+((p1[1]-p2[1])**2)))

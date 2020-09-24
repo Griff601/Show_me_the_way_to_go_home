@@ -34,6 +34,10 @@ for drunk in town.drunks:
     else:
         message = "is still at large"
     print("The drunk for house", drunk.home.address, message)
+  
+for key, visitList in town.visits.items():
+    drunkNames = list(map(lambda x: x.home.address, visitList))
+    print('point', key, 'was visited by the following drunks: ', drunkNames)
     
 # writing results to CSV file
 with open('results.txt', 'w', newline='') as output:
