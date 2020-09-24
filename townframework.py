@@ -132,6 +132,7 @@ def load(file):
             rowlist = []
             x = 0
             for value in row:
+                value = int(value)
                 rowlist.append(value)
                 if value == '0':
                     continue
