@@ -38,7 +38,7 @@ class Town:
         for drunk in random.sample(self.drunks, k=25):
             drunk.wander()
         
-
+# create drunk class and define all variables
 class Drunk:
     def __init__(self, x, y, home, town, pub):
         self.home = home
@@ -60,7 +60,7 @@ class Drunk:
         directions.append(self.nextDirectionHome(directions))
         random.shuffle(directions)
         # for every direction randomly selected, this will check if the drunk 
-        # can move here
+        # can move there
         for x, y in directions:
             
             # finding next coordinate for drunks
@@ -69,8 +69,8 @@ class Drunk:
             if self.canMoveTo(nextX, nextY):
                 self.x += x
                 self.y += y
-                # changing the environment to show individual cells that have been 
-                # passed
+                # changing the environment to show individual cells that have  
+                # been passed
                 
                 # to store all points visited by a drunk
                 self.heatMap[self.y][self.x] += 1
@@ -80,8 +80,9 @@ class Drunk:
                 pointList = self.visits[(self.x, self.y)]
                 if not self in pointList:
                     pointList.append(self)
-                
                 break
+
+    # to work out distance between drunk and home address using pythagoras            
     def distanceBetween(self, p1, p2):
         return abs (math.sqrt(((p1[0]-p2[0])**2)+((p1[1]-p2[1])**2)))
 
@@ -120,23 +121,26 @@ class Drunk:
         #             return False 
         return True
 
+# loading the file code
 def load(file): 
     locations = {}
     environment = []
     
+    # open file code
     with open(file, newline='') as f:
         reader = csv.reader(f, quoting=csv.QUOTE_NONNUMERIC)
         y = 0
-             
+        
+        # code to turn CSV list into a grid in order to create the 
+        # map/environment
         for row in reader:
             rowlist = []
             x = 0
             for value in row:
+                # converting csv values into integers
                 value = int(value)
                 rowlist.append(value)
-                if value == '0':
-                    continue
-                if not value in locations:
+                if not value == 0 and not value in locations:
                     locations[value] = Location(value)
                     
                 # asign points to locations
