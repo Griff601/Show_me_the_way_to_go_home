@@ -1,5 +1,6 @@
 import csv
 import random
+import math
 
 class Location:
     def __init__(self, address):
@@ -45,6 +46,7 @@ class Drunk:
         if imHome:
             return
         directions = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        directions.append(self.nextDirectionHome())
         random.shuffle(directions)
         # for every direction randomly selected, this will check if the drunk 
         # can move here
@@ -60,7 +62,23 @@ class Drunk:
                 # passed
                 self.environment[y][x] += 1
                 break
+    def distanceBetween(self, p1, p2):
+        return abs (math.sqrt(((p1[0]-p2[0])**2)+((p1[1]-p2[1])**2)))
+
+    # working out the
+    def nextDirectionHome(self): 
+        result = (0, 0)
+        smallestDistance = None
+        for point in self.home.points:
+            distance = self.distanceBetween((self.x, self.y), point)
+            if smallestDistance == None:
+                smallestDistance = distance 
+            elif distance < smallestDistance:
+                smallestDistance = distance
+                result = point
+        return result
             
+        
     def canMoveTo(self, x, y):
         # these checks will stop the drunks leaving the boundary of the town
         # but drunks will get stuck on the outer edge and 1 in 3 times will
